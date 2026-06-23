@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Commerce Platform</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+        body{
+            background: linear-gradient(135deg, #0f2f24, #1f5c4a, #0b1f18);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .imgg{
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.40);
+            overflow: auto;
+            padding-bottom: 30px;
+        }
+
+        .title h2{
+            text-align: center;
+            padding: 20px 10px;
+            color: #f8e7b0;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .headings{
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .headings ul{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .headings ul li{
+            display: inline-block;
+            min-width: 180px;
+            margin: 8px;
+            border: 1px solid #c9a227;
+            background: rgba(0,0,0,0.45);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(201,162,39,0.12);
+        }
+
+        .headings ul li a{
+            display: block;
+            padding: 12px 18px;
+            text-decoration: none;
+            color: #f8e7b0;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .headings ul li:hover{
+            background: #c9a227;
+        }
+
+        .headings ul li:hover a{
+            color: #111111;
+        }
+    </style>
+</head>
+
+<body>
+<div class="imgg">
+
+    <div class="title">
+        <h2>Characterization and Prediction of Early Reviewers for Product Marketing in E-Commerce Platforms</h2>
+    </div>
+
+    {% if 'admin' in request.session %}
+        <div class="headings">
+            <ul>
+                <li><a href="{% url 'admins:home' %}">Home</a></li>
+                <li><a href="{% url 'admins:uploadproducts' %}">Upload Products</a></li>
+                <li><a href="{% url 'admins:charts' 'all' %}">Charts</a></li>
+                <li><a href="{% url 'admins:logout' %}">Logout</a></li>
+            </ul>
+        </div>
+
+    {% elif 'userid' in request.session %}
+        <div class="headings">
+            <ul>
+                <li><a href="{% url 'user:home' %}">Home</a></li>
+                <li><a href="{% url 'user:cart' %}">Cart</a></li>
+                <li><a href="{% url 'user:logout' %}">Logout</a></li>
+            </ul>
+        </div>
+
+    {% else %}
+        <div class="headings">
+            <ul>
+                <li><a href="{% url 'user:home' %}">Home</a></li>
+                <li><a href="{% url 'user:index' %}">Login</a></li>
+                <li><a href="{% url 'user:registration' %}">Sign Up</a></li>
+            </ul>
+        </div>
+    {% endif %}
+
+    {% block mainblock %}
+    {% endblock %}
+
+</div>
+</body>
+</html>

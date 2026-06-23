@@ -1,0 +1,232 @@
+{% extends 'general/general.html' %}
+{% load staticfiles %}
+{% block mainblock %}
+
+<style>
+    .rating-container{
+        width: 90%;
+        margin: 40px auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        color: white;
+        gap: 40px;
+    }
+
+    .left-box{
+        width: 58%;
+    }
+
+    .right-box{
+        width: 28%;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .product-image-box{
+        width: 100%;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .product-image{
+        width: 260px;
+        height: 260px;
+        object-fit: contain;
+        border: 2px solid white;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.08);
+        display: inline-block;
+    }
+
+    .details-table{
+        width: 100%;
+    }
+
+    .details-table td{
+        padding: 10px;
+        color: white;
+        vertical-align: top;
+    }
+
+    .display-box{
+        width: 100%;
+        padding: 8px;
+        border: 1px solid white;
+        background: rgba(255,255,255,0.12);
+        color: white;
+        border-radius: 4px;
+        box-sizing: border-box;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    textarea.display-box{
+        resize: none;
+    }
+
+    .review-box{
+        width: 100%;
+        padding: 10px;
+        border: 1px solid white;
+        background: rgba(255,255,255,0.15);
+        color: white;
+        border-radius: 4px;
+        box-sizing: border-box;
+        min-height: 100px;
+        resize: none;
+    }
+
+    .review-box::placeholder{
+        color: rgba(255,255,255,0.7);
+    }
+
+    .submit-btn{
+        margin-top: 15px;
+        padding: 10px 32px;
+        background: #2563eb;
+        color: white;
+        border: 1px solid white;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .submit-btn:hover{
+        background: #1d4ed8;
+    }
+
+    .side-image{
+        width: 100%;
+        max-width: 260px;
+        height: auto;
+        max-height: 380px;
+        object-fit: contain;
+        border: 2px solid white;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto;
+        background: rgba(255,255,255,0.08);
+    }
+
+    .star-rating{
+        direction: rtl;
+        display: inline-flex;
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+
+    .star-rating input{
+        display: none;
+    }
+
+    .star-rating label{
+        font-size: 36px;
+        color: white;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label{
+        color: gold;
+    }
+
+    .rating-title{
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 12px;
+        color: white;
+    }
+</style>
+
+<div class="rating-container">
+
+    <div class="left-box">
+        <div class="product-image-box">
+            <img src="{{ pro.images.url }}" alt="{{ pro.product_name }}" class="product-image">
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <table class="details-table">
+                <tr>
+                    <td><b>Product Name:</b></td>
+                    <td><input type="text" value="{{ pro.product_name }}" class="display-box" readonly tabindex="-1"></td>
+                </tr>
+                <tr>
+                    <td><b>Vendor Name:</b></td>
+                    <td><input type="text" value="{{ pro.vendor_name }}" class="display-box" readonly tabindex="-1"></td>
+                </tr>
+                <tr>
+                    <td><b>Product Color:</b></td>
+                    <td><input type="text" value="{{ pro.color }}" class="display-box" readonly tabindex="-1"></td>
+                </tr>
+                <tr>
+                    <td><b>Product Price:</b></td>
+                    <td><input type="text" value="{{ pro.price }}" class="display-box" readonly tabindex="-1"></td>
+                </tr>
+                <tr>
+                    <td><b>Features:</b></td>
+                    <td><textarea class="display-box" rows="3" readonly tabindex="-1">{{ pro.featuers }}</textarea></td>
+                </tr>
+                <tr>
+                    <td><b>Rating:</b></td>
+                    <td>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5" required>
+                            <label for="star5">&#9733;</label>
+
+                            <input type="radio" id="star4" name="rating" value="4">
+                            <label for="star4">&#9733;</label>
+
+                            <input type="radio" id="star3" name="rating" value="3">
+                            <label for="star3">&#9733;</label>
+
+                            <input type="radio" id="star2" name="rating" value="2">
+                            <label for="star2">&#9733;</label>
+
+                            <input type="radio" id="star1" name="rating" value="1">
+                            <label for="star1">&#9733;</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Review:</b></td>
+                    <td>
+                        <textarea name="comment" class="review-box" placeholder="Enter your review here" required></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align:center;">
+                        <button type="submit" class="submit-btn">Submit Rating</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div class="right-box">
+        <div class="rating-title">Customer Review Highlights</div>
+        <img id="changingImage" src="{% static 'image/review1.jpeg' %}" class="side-image" alt="Review Image">
+    </div>
+
+</div>
+
+<script>
+    const images = [
+        "{% static 'image/review1.jpeg' %}",
+        "{% static 'image/review2.jpeg' %}",
+        "{% static 'image/review3.jpeg' %}"
+    ];
+
+    let index = 0;
+    setInterval(function() {
+        index = (index + 1) % images.length;
+        document.getElementById("changingImage").src = images[index];
+    }, 2000);
+</script>
+
+{% endblock %}

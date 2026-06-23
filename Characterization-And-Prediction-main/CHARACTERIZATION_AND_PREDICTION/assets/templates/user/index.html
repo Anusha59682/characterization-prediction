@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | E-Commerce</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        body{
+            background: url("{% static 'red1.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            margin:0;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .overlay{
+            min-height:100vh;
+            background: rgba(0,0,0,0.65);
+            padding-top:30px;
+        }
+
+        .project-title{
+            text-align:center;
+            color:white;
+            font-size:28px;
+            font-weight:bold;
+            margin-bottom:20px;
+            letter-spacing:1px;
+        }
+
+        .banner{
+            width:90%;
+            height:260px;
+            margin:0 auto 30px;
+            border:6px solid #fff;
+            background:url("{% static 'banner1.jpg' %}") no-repeat center;
+            background-size:cover;
+        }
+
+        .login-card{
+            width:380px;
+            margin:0 auto;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border-radius:12px;
+            padding:30px;
+            color:white;
+            box-shadow:0 8px 25px rgba(0,0,0,0.6);
+        }
+
+        .login-card h3{
+            text-align:center;
+            margin-bottom:25px;
+            color:yellow;
+        }
+
+        .form-control{
+            background: transparent;
+            border:1px solid #ccc;
+            color:white;
+        }
+
+        .form-control::placeholder{
+            color:#ddd;
+        }
+
+        .btn-login{
+            background:#28a745;
+            border:none;
+            color:black;
+            font-weight:bold;
+            letter-spacing:1px;
+        }
+
+        .btn-register{
+            background:#0d6efd;
+            border:none;
+            margin-top:10px;
+        }
+
+        .message-box{
+            width:fit-content;
+            margin:15px auto;
+            padding:10px 25px;
+            background:rgba(0,150,0,0.85);
+            color:white;
+            font-weight:bold;
+            border-radius:6px;
+            box-shadow:0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .footer-link{
+            text-align:center;
+            margin-top:20px;
+        }
+
+        .footer-link a{
+            color:#ffc107;
+            font-weight:bold;
+            text-decoration:none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="overlay">
+
+    <div class="project-title">
+        Characterization and Prediction of Early Reviewers for Product Marketing in E-Commerce Platforms
+    </div>
+
+    <div class="banner"></div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message-box">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="login-card">
+        <h3>Member Login</h3>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input type="text" name="username" class="form-control" placeholder="User ID" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-login btn-block">
+                <i class="fa fa-sign-in"></i> Login
+            </button>
+
+            <a href="{% url 'user:registration' %}" class="btn btn-register btn-block">
+                <i class="fa fa-user-plus"></i> Registration
+            </a>
+        </form>
+
+        <div class="footer-link">
+            <a href="#">Create your Account →</a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,203 @@
+{% extends 'general/general.html' %}
+{% block mainblock %}
+{% load staticfiles %}
+
+{% if messages %}
+<div style="margin: 20px auto; width: 80%; padding: 15px; background: rgba(0, 200, 0, 0.8); border: 2px solid white; border-radius: 5px; text-align: center;">
+    {% for message in messages %}
+        <p style="color: white; margin: 5px 0; font-weight: bold; font-size: 16px;">{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<style>
+    .cart-table{
+        width: 70%;
+        margin: 80px auto 20px auto;
+        border-collapse: collapse;
+        background: rgba(255,255,255,0.2);
+    }
+
+    .cart-table th,
+    .cart-table td{
+        color: white;
+        border: 1px solid white;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .checkout-form{
+        width: 420px;
+        margin: 30px auto;
+        background: rgba(255,255,255,0.2);
+        border: 1px solid white;
+        padding: 25px;
+        border-radius: 8px;
+    }
+
+    .checkout-form h3{
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 22px;
+    }
+
+    .checkout-form label{
+        color: white;
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .checkout-form input[type="text"],
+    .checkout-form textarea{
+        width: 100%;
+        padding: 10px;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid white;
+        color: white;
+        box-sizing: border-box;
+    }
+
+    .checkout-form input[type="text"]::placeholder,
+    .checkout-form textarea::placeholder{
+        color: rgba(255,255,255,0.7);
+    }
+
+    .button-group{
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .button-group button{
+        min-width: 120px;
+        padding: 10px 20px;
+        background: rgba(0, 150, 255, 0.8);
+        color: white;
+        border: 1px solid white;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 5px;
+        margin: 5px;
+    }
+
+    .button-group button:hover{
+        background: rgba(0, 100, 200, 1);
+    }
+
+    .history-box{
+        width: 70%;
+        margin: 30px auto;
+        color: white;
+    }
+
+    .history-box h3{
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .history-table{
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255,255,255,0.05);
+    }
+
+    .history-table th,
+    .history-table td{
+        color: white;
+        border: 1px solid white;
+        padding: 6px;
+        text-align: center;
+    }
+
+    .image{
+        border-style: solid;
+        height: 300px;
+        width: 400px;
+        margin: 40px auto;
+        background: url("{% static '13.gif' %}");
+        background-size: 100% 100%;
+        border-radius: 8px;
+    }
+</style>
+
+<table class="cart-table">
+    <tr>
+        <th>Customer Name</th>
+        <th>Product</th>
+        <th>Purchasing Status</th>
+    </tr>
+
+    {% for fb in p %}
+    <tr>
+        <td>{{ fb.customer.username }}</td>
+        <td>{{ fb.purhased.product_name }}-{{ fb.purhased.version_name }}-{{ fb.purhased.vendor_name }}</td>
+        <td>{{ fb.quantity }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if request.session.userid %}
+<div class="checkout-form">
+    <h3>Delivery Details</h3>
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" value="{{ request.session.username }}" readonly style="background: rgba(255,255,255,0.05);">
+
+        <label for="delivery_address">Delivery Address:</label>
+        <textarea id="delivery_address" name="delivery_address" placeholder="Enter your delivery address" rows="4" required></textarea>
+
+        <label for="delivery_mobile">Mobile Number:</label>
+        <input type="text" id="delivery_mobile" name="delivery_mobile" placeholder="Enter your mobile number" required>
+
+        <div class="button-group">
+            <button type="submit" name="action" value="checkout">Checkout</button>
+            <button type="submit" name="action" value="buynow">Buy Now</button>
+        </div>
+    </form>
+</div>
+
+<div class="history-box">
+    <h3>Order History</h3>
+    {% if orders %}
+    <table class="history-table">
+        <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        {% for order in orders|slice:":5" %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+            <td>{{ order.purhased.product_name }}{% if order.quantity %} x{{ order.quantity }}{% endif %}</td>
+            <td>{{ order.totalprice }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                <a href="{% url 'user:order_detail' order.id %}" style="color:yellow; font-weight:bold;">View</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <div style="padding:12px; background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:4px; text-align:center;">
+        <p style="margin:0; color:rgba(255,255,255,0.9);">You have no past orders.</p>
+    </div>
+    {% endif %}
+</div>
+{% else %}
+<div style="color: white; padding: 20px; text-align:center;">
+    <p>Please <a href="{% url 'user:index' %}" style="color: yellow;">login</a> to complete your purchase.</p>
+</div>
+{% endif %}
+
+<div class="image"></div>
+
+{% endblock %}

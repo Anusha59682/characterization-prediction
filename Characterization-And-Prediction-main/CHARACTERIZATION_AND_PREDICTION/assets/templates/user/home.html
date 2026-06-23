@@ -1,0 +1,52 @@
+{% extends 'general/general.html' %}
+{% load static %}
+
+{% block mainblock %}
+<style>
+    .product-card{
+        margin-bottom:30px;
+        padding:15px;
+        background:rgba(0,0,0,0.5);
+        border-radius:10px;
+        text-align:center;
+        color:white;
+    }
+
+    .product-card img{
+        width:100%;
+        height:250px;
+        object-fit:cover;
+        border-radius:8px;
+    }
+
+    .product-card a{
+        color:yellow;
+        font-weight:bold;
+        text-decoration:none;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+
+        {% for pro in products %}
+        <div class="col-sm-4">
+            <div class="product-card">
+
+                <img src="{{ pro.images.url }}" alt="{{ pro.product_name }}">
+
+                <p><b>Product:</b> {{ pro.product_name }}</p>
+                <p><b>Vendor:</b> {{ pro.vendor_name }}</p>
+                <p><b>Color:</b> {{ pro.color }}</p>
+                <p><b>Price:</b> ₹{{ pro.price }}</p>
+                <p><b>Features:</b><br>{{ pro.featuers }}</p>
+
+                <a href="{% url 'user:viewproduct' pro.id %}">View Product</a>
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}  
